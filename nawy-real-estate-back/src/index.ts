@@ -1,18 +1,16 @@
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
 import initApp from "./app.controller";
+import connectDB from "./database/connection";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-initApp(app, express);
+// Connection DB
+export const AppDataSource = connectDB();
+initApp(app);
 
 // Start the server
 app.listen(PORT, () => {
