@@ -6,6 +6,7 @@ import cityRoutes from './modules/City/city.route';
 import areaRoutes from './modules/Area/area.route';
 import projectRoutes from './modules/Project/project.route';
 import propertyRoutes from './modules/Property/property.route';
+import { globalErrorHandling } from './utils/errorHandling';
 
 
 function initApp(app:Express) {
@@ -29,6 +30,10 @@ function initApp(app:Express) {
     app.all("*", (req:Request, res:Response) => {
         res.status(404).json({ message: "In-valid routing please check url" });
     });
+
+    
+    // Error handling middleware
+    app.use(globalErrorHandling);
 
 }
 

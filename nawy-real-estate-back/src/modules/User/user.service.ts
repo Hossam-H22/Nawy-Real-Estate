@@ -1,4 +1,5 @@
 import AppDataSource from "../../database/data-source";
+import { CustomError } from "../../utils/errorHandling";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 
@@ -17,7 +18,11 @@ class UserService {
     }
 
     async getUserById(id: string) {
-        return await this.userRepository.findOneBy({ _id: id });
+        const user = await this.userRepository.findOneBy({ _id: id });
+        if(!user){
+            throw new CustomError("In-valid user id", 404);
+        }
+        return user
     }
 
     async createUser(data: Partial<User>) {
