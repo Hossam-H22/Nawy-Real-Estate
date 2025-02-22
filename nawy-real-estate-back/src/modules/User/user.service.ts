@@ -1,4 +1,5 @@
 import AppDataSource from "../../database/data-source";
+import ApiFeatures from "../../utils/apiFeatures";
 import { CustomError } from "../../utils/errorHandling";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
@@ -13,32 +14,39 @@ class UserService {
         this.userRepository = AppDataSource.getRepository(User);
     }
 
-    async getAllUsers() {
-        return await this.userRepository.find();
+    async getAll(query: any) {
+        let queryBuilder = this.userRepository.createQueryBuilder('user');
+        const apiFeatures = new ApiFeatures(queryBuilder, 'user', query)
+            .filter()
+            .sort()
+            .paginate()
+            .select()
+            .search();
+        const users = await apiFeatures['queryBuilder'].getMany();
+        return users;
     }
 
-    async getUserById(id: string) {
-        const user = await this.userRepository.findOneBy({ _id: id });
-        if(!user){
-            throw new CustomError("In-valid user id", 404);
-        }
-        return user
-    }
-
-    async createUser(data: Partial<User>) {
-        const newUser = this.userRepository.create(data);
-        return await this.userRepository.save(newUser);
+    async getById(id: string, query: any) {
+        query["_id"] = { "eq" : id };
+        let queryBuilder = this.userRepository.createQueryBuilder('user');
+        const apiFeatures = new ApiFeatures(queryBuilder, 'user', query)
+            .filter()
+            .select()
+        const user = await apiFeatures['queryBuilder'].getOne();
+        // const user = await this.userRepository.findOneBy({ _id: id });
+        // if(!user){
+        //     throw new CustomError("In-valid user id", 404);
+        // }
+        
+        return { message: "Done", user };
     }
 
     async updateUser(id: string, data: Partial<User>) {
-        const user = await this.userRepository.update(id, data);
-        // return await this.userRepository.findOneBy({ _id: id });
-        return user;
+        const updateResult = await this.userRepository.update(id, data);
+        const user = await this.userRepository.findOneBy({ _id: id });
+        return { message: "Done", user };
     }
 
-    async deleteUser(id: string) {
-        return await this.userRepository.delete(id);
-    }
 }
 
 export default UserService;

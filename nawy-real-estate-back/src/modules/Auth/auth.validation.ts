@@ -9,7 +9,7 @@ export const signup = z.object({
     cPassword: generalFields.cPassword,
     phone: generalFields.phone,
     role: generalFields.role.optional(),
-}).refine(data => data.password === data.cPassword, {
+}).strict().refine(data => data.password === data.cPassword, {
     message: "cPassword isn't match with password",
     path: ["cPassword"] // This ensures the error appears under cPassword field
 });
@@ -18,7 +18,7 @@ export const signup = z.object({
 export const login = z.object({
     email: generalFields.email,
     password: generalFields.password,
-});
+}).strict();
 
 // export const emailConfirmation = z.object({
 

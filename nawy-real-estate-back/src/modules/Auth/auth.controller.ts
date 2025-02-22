@@ -14,7 +14,7 @@ class AuthController {
     
     static login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const loggedUser = await authService.getUser(req.body);
-        res.status(201).json(loggedUser);
+        res.status(200).json(loggedUser);
     });
 
     // static confirmEmail = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

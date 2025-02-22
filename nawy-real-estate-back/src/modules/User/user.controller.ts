@@ -7,32 +7,22 @@ const userService = new UserService();
 
 class UserController {
 
-    static getAll = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        console.log("User Id: " + req.headers.userId);
-        
-        const users = await userService.getAllUsers();
-        res.json(users);
+    static getAllUsers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const users = await userService.getAll(req.query);
+        res.status(200).json(users);
     });
     
-    static getById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const user = await userService.getUserById(req.params.id);
-        res.json(user);
+    static getUserById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const user = await userService.getById(req.headers.userId as string, req.query);
+        res.status(200).json(user);
     });
 
-    static create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const newUser = await userService.createUser(req.body);
-        res.status(201).json(newUser);
+    static updateUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const updatedUser = await userService.updateUser(req.headers.userId as string, req.body);
+        res.status(200).json(updatedUser);
     })
 
-    static update = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const updatedUser = await userService.updateUser(req.params.id, req.body);
-        res.json(updatedUser);
-    })
 
-    static delete = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        await userService.deleteUser(req.params.id);
-        res.status(204).send();
-    })
 }
 
 export default UserController;

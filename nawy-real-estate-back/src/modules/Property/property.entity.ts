@@ -30,7 +30,7 @@ export class Property {
     _id: string;
 
     @Column()
-    title: string;
+    name: string;
 
     @Column({ type: "text" })
     description: string;

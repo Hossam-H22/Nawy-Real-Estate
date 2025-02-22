@@ -1,7 +1,7 @@
 import { generalFields } from "../../middleware/validation.middleware";
 import { z } from "zod";
 
-
-export const getUser = z.object({
-    id: generalFields.id,
-});
+export const update = z.object({
+    name: generalFields.userName.optional(),
+    phone: generalFields.phone.optional(),
+}).strict();
