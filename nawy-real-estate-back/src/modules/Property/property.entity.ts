@@ -41,12 +41,14 @@ export class Property {
     @Column({
         type: "enum",
         enum: PropertyType,
+        default: PropertyType.HOUSE
     })
-    propertyType: PropertyType;
+    type: PropertyType;
 
     @Column({
         type: "enum",
         enum: PropertyStatus,
+        default: PropertyStatus.AVAILABLE
     })
     status: PropertyStatus;
 
