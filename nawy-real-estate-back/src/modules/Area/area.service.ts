@@ -63,7 +63,6 @@ class AreaService {
         if(!area){
             throw new CustomError("In-valid area id", 400);
         }
-        console.log(area);
         
         if(data.name){
             if(area.name == data.name){
