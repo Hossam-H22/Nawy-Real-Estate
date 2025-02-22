@@ -8,6 +8,8 @@ const userService = new UserService();
 class UserController {
 
     static getAll = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        console.log("User Id: " + req.headers.userId);
+        
         const users = await userService.getAllUsers();
         res.json(users);
     });

@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { Request, Response, Express } from 'express';
 import "reflect-metadata";
+import authRoutes from './modules/Auth/auth.route';
 import userRoutes from './modules/User/user.route';
 import cityRoutes from './modules/City/city.route';
 import areaRoutes from './modules/Area/area.route';
@@ -20,6 +21,7 @@ function initApp(app:Express) {
         res.send("Welcome to the Node.js API with TypeScript!");
     });
     
+    app.use("/api/v1/auth", authRoutes);
     app.use("/api/v1/user", userRoutes);
     app.use("/api/v1/city", cityRoutes);
     app.use("/api/v1/area", areaRoutes);

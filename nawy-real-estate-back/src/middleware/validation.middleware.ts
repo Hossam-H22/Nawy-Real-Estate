@@ -1,6 +1,7 @@
 
 import { Request, Response, NextFunction } from "express";
 import { z, ZodSchema } from "zod";
+import { UserRole } from "../modules/User/user.entity";
 
 export const generalFields = {
     id: z.string().uuid(),
@@ -19,6 +20,8 @@ export const generalFields = {
         message: "Invalid Egyptian phone number format",
     }),
     gender: z.enum(["male", "female"]).describe("Please choose male or female"),
+    role: z.enum([UserRole.ADMIN, UserRole.AGENT, UserRole.BUYER]),
+    token: z.string(),
     file: z.object({
         size: z.number().positive(),
         path: z.string(),
@@ -55,8 +58,9 @@ export const validation = (schema: ZodSchema, considerHeaders: boolean = false) 
         if (!result.success) {
             res.status(400).json({ message: "Validation Error", errors: result.error.format() });
         }
-
-        next();
+        else {
+            next();
+        }
     };
 };
 
