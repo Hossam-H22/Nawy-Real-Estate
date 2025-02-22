@@ -1,34 +1,55 @@
 import { City } from "./city.entity";
 import AppDataSource from './../../database/data-source';
 import { Repository } from "typeorm";
+import { User } from "../User/user.entity";
+import ApiFeatures from "../../utils/apiFeatures";
 
 class CityService {
     private cityRepository: Repository<City>;
-    constructor(){
+    private userRepository: Repository<User>;
+    constructor() {
         this.cityRepository = AppDataSource.getRepository(City);
+        this.userRepository = AppDataSource.getRepository(User);
     }
 
-    async getAll() {
-        return this.cityRepository.find();
+    async getAll(query: any) {
+        let queryBuilder = this.cityRepository.createQueryBuilder('city');
+        const apiFeatures = new ApiFeatures(queryBuilder, 'city', query)
+            .select()
+            .filter()
+            .sort()
+            .paginate()
+            .search();
+        const cities = await apiFeatures['queryBuilder'].getMany();
+        return { message: "Done", cities };
     }
 
-    async getById(id: string) {
-        return this.cityRepository.findOne({ where: { _id: id } });
+    async getById(cityId: string, query: any) {
+        query["_id"] = { "eq" : cityId };
+        let queryBuilder = this.cityRepository.createQueryBuilder('city');
+        const apiFeatures = new ApiFeatures(queryBuilder, 'city', query)
+            .select()
+            .filter()
+        const city = await apiFeatures['queryBuilder'].getOne();
+        return { message: "Done", city };
     }
 
-    async create(data: Partial<City>) {
+    async create(userId: string, data: Partial<City>) {
+        const user = await this.userRepository.findOneBy({_id: userId})
+        data.createdBy = user as User;
         const city = this.cityRepository.create(data);
-        return this.cityRepository.save(city);
+        return await this.cityRepository.save(city);
     }
 
-    async update(id: string, data: Partial<City>) {
-        await this.cityRepository.update(id, data);
-        return this.getById(id);
+    async update(cityId: string, data: Partial<City>) {
+        const updateResult = await this.cityRepository.update(cityId, data);
+        const city = await this.cityRepository.findOneBy({ _id: cityId })
+        return { message: "Done", city };
     }
 
-    async delete(id: string) {
-        return this.cityRepository.delete(id);
-    }
+    // async delete(id: string) {
+    //     return await this.cityRepository.delete(id);
+    // }
 }
 
 export default CityService;

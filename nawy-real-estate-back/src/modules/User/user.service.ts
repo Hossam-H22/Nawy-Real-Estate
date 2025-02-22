@@ -17,10 +17,10 @@ class UserService {
     async getAll(query: any) {
         let queryBuilder = this.userRepository.createQueryBuilder('user');
         const apiFeatures = new ApiFeatures(queryBuilder, 'user', query)
+            .select()
             .filter()
             .sort()
             .paginate()
-            .select()
             .search();
         const users = await apiFeatures['queryBuilder'].getMany();
         return users;

@@ -10,8 +10,8 @@ export class City {
     @Column()
     name: string;
 
-    @Column()
-    country: string;
+    // @Column()
+    // country: string;
 
     @OneToMany(() => Area, (area) => area.cityId)
     areas: Area[];
