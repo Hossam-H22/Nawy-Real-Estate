@@ -26,7 +26,7 @@ class UserService {
         return users;
     }
 
-    async getById(id: string, query: any) {
+    async getUserById(id: string, query: any) {
         query["_id"] = { "eq" : id };
         let queryBuilder = this.userRepository.createQueryBuilder('user');
         const apiFeatures = new ApiFeatures(queryBuilder, 'user', query)

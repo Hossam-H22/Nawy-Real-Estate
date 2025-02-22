@@ -12,8 +12,8 @@ class UserController {
         res.status(200).json(users);
     });
     
-    static getUserById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const user = await userService.getById(req.headers.userId as string, req.query);
+    static getUserDetails = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const user = await userService.getUserById(req.headers.userId as string, req.query);
         res.status(200).json(user);
     });
 

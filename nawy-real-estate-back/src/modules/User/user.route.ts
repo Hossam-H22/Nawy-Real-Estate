@@ -16,7 +16,7 @@ router.get(
 router.get(
     "/", 
     auth(), 
-    UserController.getUserById
+    UserController.getUserDetails
 );
 
 router.put(
