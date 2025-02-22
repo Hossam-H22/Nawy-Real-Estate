@@ -49,7 +49,10 @@ export const auth = (accessRoles: UserRole[] = []) => {
         if(accessRoles.length>0 && !accessRoles.includes(authUser!.role)) {
             next(new CustomError("Not authorized account", 403));
         }
+        
         req.headers.userId = authUser?._id;
+        req.headers.userRole = authUser?.role;
+
         next();
     })
 }
