@@ -7,16 +7,20 @@ class PropertyController {
 
     static getAllProperties = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const properties = await propertyService.getAll(req.query);
-        res.json(properties);
+        res.status(200).json(properties);
     })
 
     static getPropertyById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const property = await propertyService.getById(req.params.propertyId, req.query);
-        res.json(property);
+        res.status(200).json(property);
     })
 
     static createProperty = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const property = await propertyService.create(req.headers.userId as string, req.body);
+        const property = await propertyService.create(
+            req.headers.userId as string, 
+            req.body, 
+            req.files as Express.Multer.File[]
+        );
         res.status(201).json(property);
     })
 
@@ -25,9 +29,10 @@ class PropertyController {
             req.headers.userId as string,
             req.headers.userRole as string,
             req.params.propertyId, 
-            req.body
+            req.body,
+            req.files as Express.Multer.File[]
         );
-        res.json(updatedProperty);
+        res.status(200).json(updatedProperty);
     })
 
     // static deleteProperty = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

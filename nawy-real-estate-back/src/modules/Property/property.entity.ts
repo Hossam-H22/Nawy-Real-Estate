@@ -18,10 +18,10 @@ export enum PropertyStatus {
 // Define an Image object type
 class PropertyImage {
     @Column()
-    url: string;
+    secure_url: string;
 
     @Column()
-    caption: string;
+    public_id: string;
 }
 
 @Entity("properties")
@@ -60,6 +60,9 @@ export class Property {
 
     @Column()
     squareFeet: number;
+
+    @Column()
+    imageFolderId: string;
 
     @Column("jsonb", { default: [] })
     images: PropertyImage[];
