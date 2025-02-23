@@ -15,14 +15,25 @@ class CityService {
 
     async getAll(query: any) {
         let queryBuilder = this.cityRepository.createQueryBuilder('city');
+        const rowsCount = await queryBuilder.getCount();
         const apiFeatures = new ApiFeatures(queryBuilder, 'city', query)
             .select()
             .filter()
             .sort()
             .paginate()
             .search();
+
+        const metadata: any = {
+            totalNumberOfData: rowsCount,
+            limit: apiFeatures.size,
+            numberOfPages: Math.floor(rowsCount / apiFeatures.size) || 1,
+            currentPage: apiFeatures.page,
+        }
+        const restPages = Math.floor(rowsCount / apiFeatures.size) - apiFeatures.page;
+        if (restPages > 0) metadata.nextPage = apiFeatures.page + 1;
+        
         const cities = await apiFeatures['queryBuilder'].getMany();
-        return { message: "Done", cities };
+        return { message: "Done", metadata, cities };
     }
 
     async getById(cityId: string, query: any) {

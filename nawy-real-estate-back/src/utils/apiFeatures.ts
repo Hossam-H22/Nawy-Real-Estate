@@ -39,6 +39,8 @@ class ApiFeatures<T extends ObjectLiteral> {
     private queryBuilder: SelectQueryBuilder<T>;
     private queryData: any;
     private tableAlias: string;
+    page: number;
+    size: number;
 
     constructor(queryBuilder: SelectQueryBuilder<T>, tableAlias:string, queryData: any) {
         this.queryBuilder = queryBuilder;
@@ -48,12 +50,14 @@ class ApiFeatures<T extends ObjectLiteral> {
 
     paginate(): this {
         let { page, size } = this.queryData;
-        if (!page || page <= 0) page = 1;
-        if (!size || size <= 0) size = 20;
-        if (size > 40) size = 40;
-        const skip = (parseInt(page) - 1) * parseInt(size);
+        this.page = parseInt(page);
+        this.size = parseInt(size);
+        if (!this.page || this.page <= 0) this.page = 1;
+        if (!this.size || this.size <= 0) this.size = 20;
+        if (this.size > 40) this.size = 40;
+        const skip = (this.page - 1) * this.size;
 
-        this.queryBuilder.take(size).skip(skip);
+        this.queryBuilder.take(this.size).skip(skip);
         return this;
     }
 

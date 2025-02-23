@@ -23,14 +23,25 @@ class PropertyService {
 
     async getAll(query: any) {
         let queryBuilder = this.propertyRepository.createQueryBuilder('property');
+        const rowsCount = await queryBuilder.getCount();
         const apiFeatures = new ApiFeatures(queryBuilder, 'property', query)
             .select()
             .filter()
             .sort()
             .paginate()
             .search();
+
+        const metadata: any = {
+            totalNumberOfData: rowsCount,
+            limit: apiFeatures.size,
+            numberOfPages: Math.floor(rowsCount / apiFeatures.size) || 1,
+            currentPage: apiFeatures.page,
+        }
+        const restPages = Math.floor(rowsCount / apiFeatures.size) - apiFeatures.page;
+        if (restPages > 0) metadata.nextPage = apiFeatures.page + 1;
+        
         const properties = await apiFeatures['queryBuilder'].getMany();
-        return { message: "Done", properties };
+        return { message: "Done", metadata, properties };
     }
 
     async getById(propertyId: string, query: any) {
