@@ -12,7 +12,6 @@ export type PropertyItemType = {
     bathrooms: number,
     squareFeet: number,
     images: { public_id: string, secure_url: string }[],
-
 }
 export default function PropertyListItem({ propertyData }: { propertyData: PropertyItemType }) {
 

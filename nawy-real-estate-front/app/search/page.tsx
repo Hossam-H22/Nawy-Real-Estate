@@ -1,14 +1,14 @@
 "use client"
 
 import BreadCrumb from '@/components/BreadCrumb'
-import ProjectFiltre from '@/components/ProjectFiltre'
+import ProjectFiltre from '@/components/filtering/ProjectFiltre'
 import PropertiesList from '@/components/PropertiesList'
-import PropertyPriceFiltre from '@/components/PropertyPriceFiltre'
-import PropertyRoomsFiltre from '@/components/PropertyRoomsFiltre'
-import PropertySquareFiltre from '@/components/PropertySquareFiltre'
-import PropertyStatusFiltre from '@/components/PropertyStatusFiltre'
-import PropertyTypeFiltre from '@/components/PropertyTypeFiltre'
-import SearchBar from '@/components/SearchBar'
+import PropertyPriceFiltre from '@/components/filtering/PropertyPriceFiltre'
+import PropertyRoomsFiltre from '@/components/filtering/PropertyRoomsFiltre'
+import PropertySquareFiltre from '@/components/filtering/PropertySquareFiltre'
+import PropertyStatusFiltre from '@/components/filtering/PropertyStatusFiltre'
+import PropertyTypeFiltre from '@/components/filtering/PropertyTypeFiltre'
+import SearchBar from '@/components/filtering/SearchBar'
 import React, { useState } from 'react'
 
 export default function SearchPage() {

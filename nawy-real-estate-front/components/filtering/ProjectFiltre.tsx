@@ -1,8 +1,8 @@
 'use client'
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react'
-import Loading from './Loading';
-import ErrorDesign from './ErrorDesign';
+import Loading from '../Loading';
+import ErrorDesign from '../ErrorDesign';
 
 type projectType = {
     _id: string,
@@ -17,21 +17,6 @@ export default function ProjectFiltre({quary, setQuary}: any) {
         if (!res.ok) throw new Error("Failed to fetch data");
         return res.json();
     };
-
-    // const [projectList, setProjectList] = useState<projectType[]>([
-    //     {
-    //         _id: "11",
-    //         name: "City 1",
-    //     },
-    //     {
-    //         _id: "22",
-    //         name: "City 2",
-    //     },
-    //     {
-    //         _id: "33",
-    //         name: "City 3",
-    //     },
-    // ]);
 
     function handleClick(id: string) {
         if (quary.projectIds.includes(id)) {
