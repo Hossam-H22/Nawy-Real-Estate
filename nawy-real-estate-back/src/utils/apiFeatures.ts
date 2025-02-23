@@ -64,17 +64,42 @@ class ApiFeatures<T extends ObjectLiteral> {
     filter(): this {
         const excludeQueryParams = ['page', 'size', 'sort', 'fields', 'details', 'search'];
         const filterQuery = { ...this.queryData };
+        const parameters: Record<string, any> = {}; // Store dynamic parameters
+        const conditions: string[] = []; // Store dynamic WHERE conditions
+        
         excludeQueryParams.forEach(param => delete filterQuery[param]);
-
+        let c = 0;
         Object.entries(filterQuery).forEach(([key, value]) => {
             if (typeof value === 'object' && value !== null) {
                 Object.entries(value).forEach(([operator, val]) => {
-                    this.queryBuilder.andWhere(`${this.tableAlias}.${key} ${this.getOperator(operator)} :value`, { value: val });
+                    const op = this.getOperator(operator);
+                    if(op=="BETWEEN"){
+                        if(val.split(',').length==2){
+                            const [mini, maxi] = val.split(',');
+                            conditions.push(`${this.tableAlias}.${key} ${op} :mini${c} AND :maxi${c}`)
+                            parameters[`mini${c}`] = mini;
+                            parameters[`maxi${c}`] = maxi;
+                            c++;
+                            // this.queryBuilder.andWhere(`${this.tableAlias}.${key} ${op} :${key}mini AND :${key}maxi`, { mini, maxi });
+                        } 
+                    }
+                    else {
+                        // this.queryBuilder.andWhere(`${this.tableAlias}.${key} ${op} ${op=='IN'||op=='NOT IN'? `(:...value)`: `:value`}`, { value: op=='IN'||op=='NOT IN'? val.split(','): val });
+                        conditions.push(`${this.tableAlias}.${key} ${op} ${op=='IN'||op=='NOT IN'? `(:...value${c})`: `:value${c}`}`)
+                        parameters[`value${c}`] = (op=='IN'||op=='NOT IN'? val.split(','): val);
+                        c++;
+                    }
                 });
             } else {
                 this.queryBuilder.andWhere(`${this.tableAlias}.${key} = :value`, { value });
+                conditions.push(`${this.tableAlias}.${key} = :value${c}`)
+                parameters[`value${c}`] = value;
+                c++
             }
         });
+        
+        this.queryBuilder.where(conditions.join(" AND "), parameters)
+        // console.log("SQL  =======  " + this.queryBuilder.getSql());
         return this;
     }
 
@@ -88,6 +113,7 @@ class ApiFeatures<T extends ObjectLiteral> {
             neq: '<>',
             in: 'IN',
             nin: 'NOT IN',
+            range: 'BETWEEN',
         };
         return operatorMap[operator] || '=';
     }
@@ -114,6 +140,7 @@ class ApiFeatures<T extends ObjectLiteral> {
             // Select Some Fields from table
             const AllRelationFieldsSet = new Set(realtions[this.tableAlias].map((item: {field:string, table:string}) => item.field));
             let selectFields = AllFields.filter((item: string) => !AllRelationFieldsSet.has(item));
+            if(selectFields.includes('id')) selectFields[selectFields.indexOf('id')] = "_id"; 
             if(!selectFields.includes('_id')) selectFields.push('_id');
             selectFields = selectFields.map((item:string) => `${this.tableAlias}.${item}`)
             this.queryBuilder.select(selectFields)
