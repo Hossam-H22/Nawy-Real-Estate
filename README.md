@@ -7,12 +7,23 @@
 |    [Frontend Docs]    |     [Backend Docs]     |
 |-----------------------|------------------------|
 
+<br>
+
+## Take a look quickly
+
+https://github.com/user-attachments/assets/f93dc39d-45ea-4870-9fc0-7fa93b78d41f
+
+
+<br>
+
 ## Prerequisites:
   - Node
   - Postgres Database
   - npm
 
-## Run Steps
+<br>
+
+## Run Steps:
 
 ### Step 1
 ```bash
