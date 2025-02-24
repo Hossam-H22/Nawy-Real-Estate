@@ -1,6 +1,16 @@
+'use client';
 import React, { useState } from 'react'
+import { quaryType } from '../constant';
 
-export default function SearchBar({ quary, setQuary, setShowFilterTap }: any) {
+export default function SearchBar({ 
+    searchProperties, 
+    setSearchProperties, 
+    setShowFilterTap 
+}: {
+    searchProperties:quaryType,
+    setSearchProperties:React.Dispatch<React.SetStateAction<quaryType>>,
+    setShowFilterTap:React.Dispatch<React.SetStateAction<boolean>>,
+}) {
 
     const [openSortOptions, setOpenSortOptions] = useState<boolean>(false);
     const sortOptions = [
@@ -10,15 +20,26 @@ export default function SearchBar({ quary, setQuary, setShowFilterTap }: any) {
         { display: "Minimam Square Feet", value: "-squareFeet" },
     ]
 
+    const handleSort = (value: string) => {
+        // const newQuery = { ...searchProperties };
+        // if (newQuery.sortBy !== value) newQuery.sortBy = value;
+        // else newQuery.sortBy = "";
+        // setSearchProperties(newQuery);
+
+        // if (searchProperties.sortBy === value) value=""
+        setSearchProperties((prevQuery) => ({ ...prevQuery, sortBy: prevQuery.sortBy===value? "": value }))
+    }
+
     return (
         <div className='w-full flex mb-5 gap-2 relative'>
             <input
                 type="text"
-                value={quary.search}
-                onChange={(e) => {
-                    const newQuery = { ...quary };
-                    newQuery.search = e.target.value;
-                    setQuary(newQuery);
+                value={searchProperties.search}
+                onChange={(e : React.ChangeEvent<HTMLInputElement>) => {
+                    // const newQuery = { ...searchProperties };
+                    // newQuery.search = e.target.value;
+                    // setSearchProperties(newQuery);
+                    setSearchProperties((prevQuery: any) => ({ ...prevQuery, search: e.target.value }))
                 }}
                 placeholder="Search for property"
                 className='w-full py-2.5 px-6 border border-gray-300 rounded-lg focus:outline-none focus:ring-2'
@@ -49,13 +70,10 @@ export default function SearchBar({ quary, setQuary, setShowFilterTap }: any) {
                         <button
                             key={index}
                             onClick={() => {
-                                const newQuery = { ...quary };
-                                if (newQuery.sortBy !== option.value) newQuery.sortBy = option.value;
-                                else newQuery.sortBy = "";
-                                setQuary(newQuery);
+                                handleSort(option.value)
                             }}
                             className={`block w-full text-left px-4 py-2 text-gray-700  
-                                ${quary.sortBy === option.value ? "bg-blue-600 text-white" : "hover:bg-gray-100"}`
+                                ${searchProperties.sortBy === option.value ? "bg-blue-600 text-white" : "hover:bg-gray-100"}`
                             }
                         >
                             {option.display}

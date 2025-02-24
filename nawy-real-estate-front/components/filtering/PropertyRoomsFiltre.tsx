@@ -1,13 +1,20 @@
+import { quaryType } from "../constant";
 
-export default function PropertyRoomsFiltre({quary, setQuary}: any) {
+export default function PropertyRoomsFiltre({
+    quary, 
+    setQuary
+}: {
+    quary:quaryType,
+    setQuary:React.Dispatch<React.SetStateAction<quaryType>>,
+}) {
 
     const updateRoomNumbers = (type:string, num:number)=>{
-        let newNumber = 0;
-        if(quary[type] != num) newNumber = num;
-
-        const newQuary = { ...quary };
-        newQuary[type] = newNumber;
-        setQuary(newQuary);
+        if(type === "numBathRooms"){
+            setQuary(prev => ({ ...prev, numBathRooms: prev.numBathRooms==num? 0:num  }));
+        }
+        else {
+            setQuary(prev => ({ ...prev, numBedRooms: prev.numBedRooms==num? 0:num  }));
+        }
     }
 
     return <div>

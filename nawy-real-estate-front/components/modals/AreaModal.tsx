@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -6,28 +6,34 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { authToken, baseAPI } from '../constant';
 
 const areaSchema = z.object({
     name: z.string().min(2, "Area name is too short"),
     cityId: z.string(),
 });
 
-export default function AreaModal({ setIsAreaModalOpen, cityId }: any) {
+export default function AreaModal({ 
+    setIsAreaModalOpen, 
+    cityId 
+}: { 
+    setIsAreaModalOpen:React.Dispatch<React.SetStateAction<boolean>>, 
+    cityId:string 
+}) {
     const queryClient = useQueryClient();
-
 
     // Mutation to Add New City
     const addAreaMutation: any = useMutation({
         mutationFn: async (newArea) => {
-            const { data } = await axios.post("http://localhost:5000/api/v1/area", newArea, {
+            const { data } = await axios.post(`${baseAPI}/area`, newArea, {
                 headers: {
-                    "authorization": `DragonH22__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY3YTczMDdmLTM2OWUtNDY1ZS05MWMwLWQzNGE5ZDMwYzQ4MiIsImlzTG9nZ2VkSW4iOnRydWUsInJvbGUiOiJidXllciIsImlhdCI6MTc0MDI5NjQzMiwiZXhwIjoxNzcxODMyNDMyfQ.FP2H05BAZhGW--kExaLR-uoJFpqxcPoKS0-VoViZ9co`
+                    "authorization": authToken
                 },
             });
             return data;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(("areas" as any)); // Refresh the areas list
+            queryClient.invalidateQueries(("areas" as any)); // Refresh the area list
             toast.success("Area Add successfully", { duration:1500 });
             setIsAreaModalOpen(false);
         },
@@ -39,7 +45,6 @@ export default function AreaModal({ setIsAreaModalOpen, cityId }: any) {
         register,
         handleSubmit,
         formState: { errors },
-        reset,
     } = useForm({
         resolver: zodResolver(areaSchema),
         defaultValues: {

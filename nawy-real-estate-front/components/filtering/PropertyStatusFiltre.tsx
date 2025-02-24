@@ -1,18 +1,26 @@
+import { quaryType } from "../constant";
 
-export default function PropertyStatusFiltre({quary, setQuary}: any) {
+export default function PropertyStatusFiltre({
+    quary, 
+    setQuary
+}: {
+    quary:quaryType,
+    setQuary:React.Dispatch<React.SetStateAction<quaryType>>,
+}) {
     const statusList:string[] = ["available", "sold", "rented"];
 
     function handleClick(status: string) {
         if (quary.propertyStatus.includes(status)) {
             const newSelectedTypesList = quary.propertyStatus.filter((element: string) => element != status);
-            const newQuary = { ...quary };
-            newQuary.propertyStatus = newSelectedTypesList;
-            setQuary(newQuary);
+            // const newQuary = { ...quary };
+            // newQuary.propertyStatus = newSelectedTypesList;
+            setQuary(prev => ({ ...prev, propertyStatus: newSelectedTypesList }));
         }
         else {
-            const newQuary = { ...quary };
-            newQuary.propertyStatus = [...quary.propertyStatus, status];
-            setQuary(newQuary);
+            // const newQuary = { ...quary };
+            // newQuary.propertyStatus = [...quary.propertyStatus, status];
+            // setQuary(newQuary);
+            setQuary(prev => ({ ...prev, propertyStatus: [...prev.propertyStatus, status] }));
         }
     }
 

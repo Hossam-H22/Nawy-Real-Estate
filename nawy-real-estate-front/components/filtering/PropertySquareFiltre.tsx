@@ -1,7 +1,14 @@
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { quaryType } from "../constant";
 
-export default function PropertySquareFiltre({quary, setQuary}: any) {
+export default function PropertySquareFiltre({
+    quary, 
+    setQuary
+}: {
+    quary:quaryType,
+    setQuary:React.Dispatch<React.SetStateAction<quaryType>>,
+}) {
     const minSquareFeet = 50;
     const maxSquareFeet = 1000;
 
@@ -30,9 +37,10 @@ export default function PropertySquareFiltre({quary, setQuary}: any) {
     };
 
     const setSquareFeetRange = (updatedRange: number[])=>{
-        const newQuery = {...quary};
-        newQuery.squareFeetRange = updatedRange
-        setQuary(newQuery);
+        // const newQuery = {...quary};
+        // newQuery.squareFeetRange = updatedRange
+        // setQuary(newQuery);
+        setQuary(prev => ({ ...prev, squareFeetRange: updatedRange}));
     }
 
     const formatNumber = (num: number) => num.toLocaleString();

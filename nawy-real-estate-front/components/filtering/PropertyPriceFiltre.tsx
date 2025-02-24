@@ -1,7 +1,14 @@
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { quaryType } from "../constant";
 
-export default function PropertyPriceFiltre({quary, setQuary}: any) {
+export default function PropertyPriceFiltre({
+    quary, 
+    setQuary
+}: {
+    quary:quaryType,
+    setQuary:React.Dispatch<React.SetStateAction<quaryType>>,
+}) {
     const minPrice = 1;
     const maxPrice = 100000000;
 
@@ -30,9 +37,9 @@ export default function PropertyPriceFiltre({quary, setQuary}: any) {
     };
 
     const setPriceRange = (updatedRange: number[])=>{
-        const newQuery = {...quary};
-        newQuery.priceRange = updatedRange
-        setQuary(newQuery);
+        // const newQuery = {...quary};
+        // newQuery.priceRange = updatedRange
+        setQuary(prev => ({ ...prev, priceRange: updatedRange}));
     }
 
     const formatNumber = (num: number) => num.toLocaleString();

@@ -1,5 +1,12 @@
+import { quaryType } from "../constant";
 
-export default function PropertyTypeFiltre({quary, setQuary}: any) {
+export default function PropertyTypeFiltre({
+    quary, 
+    setQuary
+}: {
+    quary:quaryType,
+    setQuary:React.Dispatch<React.SetStateAction<quaryType>>,
+}) {
     const typeList: string[] = ["house", "apartment", "land", "commercial"];
 
     function handleClick(type: string) {

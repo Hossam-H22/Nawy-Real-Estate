@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { authToken, baseAPI } from '../constant';
 
 const areaSchema = z.object({
     name: z.string().min(2, "Area name is too short"),
@@ -13,21 +14,27 @@ const areaSchema = z.object({
     areaId: z.string(),
 });
 
-export default function ProjectModal({ setIsProjectModalOpen, areaId }: any) {
+export default function ProjectModal({ 
+    setIsProjectModalOpen, 
+    areaId 
+}: { 
+    setIsProjectModalOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+    areaId: string
+}) {
     const queryClient = useQueryClient();
 
     // Mutation to Add New City
     const addProjectMutation: any = useMutation({
         mutationFn: async (newProject) => {
-            const { data } = await axios.post("http://localhost:5000/api/v1/project", newProject, {
+            const { data } = await axios.post(`${baseAPI}/project`, newProject, {
                 headers: {
-                    "authorization": `DragonH22__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY3YTczMDdmLTM2OWUtNDY1ZS05MWMwLWQzNGE5ZDMwYzQ4MiIsImlzTG9nZ2VkSW4iOnRydWUsInJvbGUiOiJidXllciIsImlhdCI6MTc0MDI5NjQzMiwiZXhwIjoxNzcxODMyNDMyfQ.FP2H05BAZhGW--kExaLR-uoJFpqxcPoKS0-VoViZ9co`
+                    "authorization": authToken
                 },
             });
             return data;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries(("projects" as any)); // Refresh the areas list
+            queryClient.invalidateQueries(("projects" as any)); // Refresh the project list
             toast.success("Project Add successfully", { duration:1500 });
             setIsProjectModalOpen(false);
         },
@@ -39,7 +46,6 @@ export default function ProjectModal({ setIsProjectModalOpen, areaId }: any) {
         register,
         handleSubmit,
         formState: { errors },
-        reset,
     } = useForm({
         resolver: zodResolver(areaSchema),
         defaultValues: {
@@ -57,14 +63,9 @@ export default function ProjectModal({ setIsProjectModalOpen, areaId }: any) {
     };
 
 
-    // console.log("addAreaMutation: ");
-    // console.log(addAreaMutation);
-
-
-
     return <div className="modal-overlay">
         <div className="modal-content">
-            <h2 className='p-2'>Add New Area</h2>
+            <h2 className='p-2'>Add New Project</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <input
                     type="text"

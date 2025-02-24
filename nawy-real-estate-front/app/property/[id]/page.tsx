@@ -1,10 +1,12 @@
 "use client"
+import { baseAPI } from '@/components/constant';
 import ErrorDesign from '@/components/ErrorDesign';
 import ImageSlider from '@/components/ImageSlider';
 import Loading from '@/components/Loading';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import React from 'react'
+
 
 type PropertyItemType = {
     _id: string,
@@ -30,12 +32,12 @@ export default function PropertyPage() {
 
     const fetchData = async () => {
         const selcetedFields = "fields=name,description,price,type,status,bedrooms,bathrooms,squareFeet,images,projectId"
-        const res = await fetch(`http://localhost:5000/api/v1/property/${propertyId}?${selcetedFields}`);
+        const res = await fetch(`${baseAPI}/property/${propertyId}?${selcetedFields}`);
         if (!res.ok) throw new Error("Failed to fetch data");
         return res.json();
     };
 
-    const { data, error, isLoading, refetch } = useQuery({
+    const { data, error, isLoading } = useQuery({
         queryKey: ["data", propertyId],
         queryFn: fetchData
     });

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -6,21 +6,26 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { authToken, baseAPI } from '../constant';
 
 const citySchema = z.object({
     name: z.string().min(2, "City name is too short"),
 });
 
-export default function CityModal({ setIsCityModalOpen }: any) {
+export default function CityModal({ 
+    setIsCityModalOpen 
+}: {
+    setIsCityModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) {
     const queryClient = useQueryClient();
 
 
     // Mutation to Add New City
     const addCityMutation: any = useMutation({
         mutationFn: async (newCity) => {
-            const { data } = await axios.post("http://localhost:5000/api/v1/city", newCity, {
+            const { data } = await axios.post(`${baseAPI}/city`, newCity, {
                 headers: {
-                    "authorization": `DragonH22__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY3YTczMDdmLTM2OWUtNDY1ZS05MWMwLWQzNGE5ZDMwYzQ4MiIsImlzTG9nZ2VkSW4iOnRydWUsInJvbGUiOiJidXllciIsImlhdCI6MTc0MDI5NjQzMiwiZXhwIjoxNzcxODMyNDMyfQ.FP2H05BAZhGW--kExaLR-uoJFpqxcPoKS0-VoViZ9co`
+                    "authorization": authToken
                 },
             });
             return data;
@@ -38,7 +43,6 @@ export default function CityModal({ setIsCityModalOpen }: any) {
         register,
         handleSubmit,
         formState: { errors },
-        reset,
     } = useForm({
         resolver: zodResolver(citySchema),
         defaultValues: {

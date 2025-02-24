@@ -1,19 +1,20 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { z } from "zod";
-import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "@/components/Loading";
+import axios, { AxiosError } from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import CityModal from "@/components/modals/CityModal";
 import AreaModal from "@/components/modals/AreaModal";
 import ProjectModal from "@/components/modals/ProjectModal";
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast'
+import { authToken, baseAPI } from "@/components/constant";
 
-// ✅ Validation Schema
+
+// Validation Schema
 const apartmentSchema = z.object({
     file: z.custom<FileList>()
         .refine((files) => files.length >= 1 && files.length <= 5, "Upload 1-5 images.")
@@ -37,21 +38,21 @@ const apartmentSchema = z.object({
     project: z.string().nonempty("Select a project."),
 });
 
-// ✅ Fetch Cities
+// Fetch Cities
 const fetchCities = async () => {
-    const { data } = await axios.get(`http://localhost:5000/api/v1/city?fields=name`);
+    const { data } = await axios.get(`${baseAPI}/city?fields=name`);
     return data.cities;
 };
 
-// ✅ Fetch Areas
+// Fetch Areas
 const fetchAreas = async (cityId: string) => {
-    const { data } = await axios.get(`http://localhost:5000/api/v1/area?fields=name&cityId[eq]=${cityId}`);
+    const { data } = await axios.get(`${baseAPI}/area?fields=name&cityId[eq]=${cityId}`);
     return data.areas;
 };
 
-// ✅ Fetch Projects
+// Fetch Projects
 const fetchProjects = async (areaId: string) => {
-    const { data } = await axios.get(`http://localhost:5000/api/v1/project?fields=name&areaId[eq]=${areaId}`);
+    const { data } = await axios.get(`${baseAPI}/project?fields=name&areaId[eq]=${areaId}`);
     return data.projects;
 };
 
@@ -68,9 +69,7 @@ export default function NewProperty() {
     const {
         register,
         handleSubmit,
-        control,
         watch,
-        setValue,
         formState: { errors },
     } = useForm({
         resolver: zodResolver(apartmentSchema),
@@ -113,12 +112,13 @@ export default function NewProperty() {
     });
 
     // Handle Form Submission
-    const mutation: any = useMutation({
+    // const mutation = useMutation({
+    const {data, mutate, status, error} = useMutation({
         mutationFn: async (formData) => {
-            const response = await axios.post("http://localhost:5000/api/v1/property", formData, {
+            const response = await axios.post(`${baseAPI}/property`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    "authorization": `DragonH22__eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY3YTczMDdmLTM2OWUtNDY1ZS05MWMwLWQzNGE5ZDMwYzQ4MiIsImlzTG9nZ2VkSW4iOnRydWUsInJvbGUiOiJidXllciIsImlhdCI6MTc0MDI5NjQzMiwiZXhwIjoxNzcxODMyNDMyfQ.FP2H05BAZhGW--kExaLR-uoJFpqxcPoKS0-VoViZ9co`
+                    "authorization": authToken
                 },
             });
             return response.data;
@@ -143,11 +143,9 @@ export default function NewProperty() {
         // formData.append("area", data.area);
         formData.append("projectId", data.project);
 
-        mutation.mutate(formData);
+        // mutation.mutate(formData);
+        mutate(formData);
     };
-
-    console.log("Property mutation");
-    console.log(mutation);
 
     return (
         <div className="max-w-4xl mx-auto bg-white shadow-lg p-6 rounded-lg">
@@ -185,7 +183,7 @@ export default function NewProperty() {
 
                 {/* Bathrooms */}
                 <input type="number" placeholder="Bathrooms" {...register("bathrooms")} className="w-full border p-2 rounded" />
-                {errors.bathrooms && <p className="text-red-500">{errors.bathrooms.message}</p>}
+                {errors?.bathrooms && <p className="text-red-500">{errors?.bathrooms?.message}</p>}
 
                 {/* SquareFeet */}
                 <input type="number" placeholder="SquareFeet m2" {...register("squareFeet")} className="w-full border p-2 rounded" />
@@ -251,20 +249,19 @@ export default function NewProperty() {
                 <button
                     type="submit"
                     className="w-full bg-blue-500 text-white py-2 rounded"
-                    disabled={mutation.status === 'loading'}
+                    disabled={status === 'pending'}
                 >
-                    {mutation.status === 'loading' ? "Adding property .." : "Submit"}
+                    {status === 'pending' ? "Adding property .." : "Submit"}
                 </button>
                 {
-                    // mutation.status !== 'loading'
-                    // && mutation.data?.message === "Done"
+                    // status !== 'loading'
+                    // && data?.message === "Done"
                     // && <div className="bg-green-600 text-white p-3">Property Added successfully</div>
                 }
                 {
-                    mutation.status !== 'loading' && mutation.error && mutation?.error?.response?.data
+                    status !== 'pending' && error && (error as AxiosError)?.response?.data
                     && <div className="bg-red-900 text-white p-3">{
-                        mutation?.error?.response?.data?.message ||
-                        mutation?.error?.response?.data?.errors
+                        ((error as AxiosError)?.response?.data as {message: string}).message
                     }</div>
                 }
             </form>

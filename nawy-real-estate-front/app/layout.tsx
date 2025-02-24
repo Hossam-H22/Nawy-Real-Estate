@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -5,9 +6,8 @@ import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { Toaster } from "react-hot-toast";
 
 
-
 export const metadata: Metadata = {
-  title: "Home | Nawy",
+  title: "Nawy",
   description: "Nawy Real Estate Web App",
 };
 

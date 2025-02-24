@@ -1,19 +1,24 @@
 'use client'
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react'
 import Loading from '../Loading';
-import ErrorDesign from '../ErrorDesign';
+import { baseAPI, quaryType } from '../constant';
 
 type projectType = {
     _id: string,
     name: string,
 }
 
-export default function ProjectFiltre({quary, setQuary}: any) {
+export default function ProjectFiltre({
+    quary, 
+    setQuary
+}: {
+    quary:quaryType,
+    setQuary:React.Dispatch<React.SetStateAction<quaryType>>,
+}) {
 
     const fetchData = async () => {
         const selcetedFields = "fields=name"
-        const res = await fetch(`http://localhost:5000/api/v1/project?${selcetedFields}`);
+        const res = await fetch(`${baseAPI}/project?${selcetedFields}`);
         if (!res.ok) throw new Error("Failed to fetch data");
         return res.json();
     };
@@ -32,7 +37,7 @@ export default function ProjectFiltre({quary, setQuary}: any) {
         }
     }
 
-    const { data, error, isLoading, refetch } = useQuery({
+    const { data, error, isLoading } = useQuery({
         queryKey: ["data"],
         queryFn: fetchData
     });
@@ -56,7 +61,7 @@ export default function ProjectFiltre({quary, setQuary}: any) {
                 </button>
             </div>
             { isLoading ? <Loading minHeight={0} /> : <div className='max-h-72 overflow-auto'>
-                {data.projects.map((element:projectType, index:number) => <label key={element._id} className="flex items-center gap-2 mb-2 text-start w-fit cursor-pointer">
+                {data.projects.map((element:projectType) => <label key={element._id} className="flex items-center gap-2 mb-2 text-start w-fit cursor-pointer">
                     <input
                         type="checkbox"
                         checked={quary.projectIds.includes(element._id)}

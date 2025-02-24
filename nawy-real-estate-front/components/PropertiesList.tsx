@@ -1,12 +1,16 @@
 "use client"
 import { useQuery } from '@tanstack/react-query';
-import React, { Fragment, useState } from 'react'
 import PropertyListItem, { PropertyItemType } from './PropertyListItem';
 import ErrorDesign from './ErrorDesign';
 import Loading from './Loading';
+import { baseAPI, quaryType } from './constant';
 
 
-export default function PropertiesList({quary}: {quary:string}) {
+export default function PropertiesList({
+    quary, 
+}: {
+    quary: quaryType,
+}) {
 
     const createQuery = (queryObject: any)=>{
         let query="";
@@ -37,20 +41,20 @@ export default function PropertiesList({quary}: {quary:string}) {
         return query;
     }
 
-    const fetchData = async ({ queryKey }: { queryKey: [string, string] }) => {
+    const fetchData = async ({ queryKey }: { queryKey: [string, quaryType] }) => {
         const [, queryObject] = queryKey;
         // console.log(queryObject);
         const queryString = createQuery(queryObject);
         // console.log(queryString);
         
         const selcetedFields = "fields=name,description,price,type,status,bedrooms,bathrooms,squareFeet,images"
-        const res = await fetch(`http://localhost:5000/api/v1/property?${selcetedFields}${queryString}`);
+        const res = await fetch(`${baseAPI}/property?${selcetedFields}${queryString}`);
         if (!res.ok) throw new Error("Failed to fetch data");
         // const result: any = await res.json();
         return res.json();
     };
 
-    const { data, error, isLoading, refetch } = useQuery({
+    const { data, error, isLoading } = useQuery({
         queryKey: ["data", quary],
         queryFn: fetchData
     });
