@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/react-query';
 import Loading from '../Loading';
 import { baseAPI, quaryType } from '../constant';
+// import ErrorDesign from '../ErrorDesign';
 
 type projectType = {
     _id: string,
@@ -42,11 +43,12 @@ export default function ProjectFiltre({
         queryFn: fetchData
     });
 
-    // if(error)
-    //     return <ErrorDesign errorMessage={error.message} />;
+    if(error || isLoading)
+        // return <ErrorDesign errorMessage={error.message} />;
+        return <></>;
 
     return <>
-        { (isLoading || error || data.projects.length) && <div>
+        { (isLoading || error || data.projects.length>0) && <div>
             <div className='flex justify-between mb-2'>
                 <p className='font-semibold'>Projects</p>
                 <button

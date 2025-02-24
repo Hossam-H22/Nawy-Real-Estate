@@ -183,7 +183,7 @@ export default function NewProperty() {
 
                 {/* Bathrooms */}
                 <input type="number" placeholder="Bathrooms" {...register("bathrooms")} className="w-full border p-2 rounded" />
-                {errors?.bathrooms && <p className="text-red-500">{errors?.bathrooms?.message}</p>}
+                {(errors as any)?.bathrooms && <p className="text-red-500">{errors?.bathrooms?.message}</p>}
 
                 {/* SquareFeet */}
                 <input type="number" placeholder="SquareFeet m2" {...register("squareFeet")} className="w-full border p-2 rounded" />
