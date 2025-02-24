@@ -1,8 +1,11 @@
 # Nawy Real Estate Baeckend API
 
+<br>
 
 ## Overview
 This is a RESTful API for a simple real estate application built using Node.js with TypeScript and PostgreSQL. The API allows users to manage properties, projects, areas, cities, and users.
+
+<br>
 
 ## Technologies Used
 - **Node.js** with **TypeScript**
@@ -12,12 +15,16 @@ This is a RESTful API for a simple real estate application built using Node.js w
 - **Cloudinary** for image uploads
 - **Express.js** for routing and middleware
 
+<br>
+
 ## Features
 - **Authentication & Authorization** middleware for securing endpoints
 - **Error Handling** middleware for consistent API responses
 - **Validation** middleware using Zod
 - **Pagination, Filtering, Sorting, and Selection** using the `ApiFeatures` class
 - **CRUD Operations** for all entities
+
+<br>
 
 ## Folder Structure
 ```
@@ -33,6 +40,8 @@ src/
       moduleName.validation.ts
   utils/
 ```
+
+<br>
 
 ## Entities & Database Schema
 
@@ -101,6 +110,8 @@ src/
 }
 ```
 
+<br>
+
 ## API Endpoints
 Each module includes four endpoints:
 
@@ -134,6 +145,10 @@ Each module includes four endpoints:
 - `POST /properties` - Create a new property
 - `PUT /properties/:id` - Update a property
 
+
+<br>
+
+
 ## Query Parameters for Filtering & Pagination
 - **Pagination**: `?page=1&size=10`
 - **Sorting**: like `?sort=-createdAt` (Descending), `?sort=price` (Ascending)
@@ -141,21 +156,41 @@ Each module includes four endpoints:
 - **Filtering**: `?price[gte]=50000&status=available`
 - **Search**: `?search=apartment`
 
+
+<br>
+
 ## Authentication & Authorization
 - User authentication is implemented using JWT.
 - Middleware ensures role-based access control.
 - Passwords are securely hashed using bcrypt.
 
+
+<br>
+
+
 ## Image Uploads
 - Cloudinary is used to store images.
 - The `properties` module allows uploading images via Cloudinary.
+
+
+<br>
 
 ## Error Handling
 - All errors are handled using a centralized middleware.
 - Standard response format for errors.
 
 
+<br>
+
+
+## Postman - [link](https://documenter.getpostman.com/view/23533987/2sAYdeKqjG)
+
+
+<br>
+
 ## Conclusion
 This API provides a comprehensive real estate management system with authentication, authorization, validation, and data management features.
 
 
+
+<br>
