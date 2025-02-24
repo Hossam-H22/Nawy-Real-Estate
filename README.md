@@ -1,5 +1,12 @@
 # Nawy Real Estate
 
+[Frontend Docs]: https://github.com/Hossam-H22/Nawy-Real-Estate/tree/master/nawy-real-estate-front
+[Backend Docs]: https://github.com/Hossam-H22/Nawy-Real-Estate/tree/master/nawy-real-estate-back
+
+
+|    [Frontend Docs]    |     [Backend Docs]     |
+|-----------------------|------------------------|
+
 ## Prerequisites:
   - Node
   - Postgres Database
