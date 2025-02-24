@@ -17,7 +17,7 @@ class PropertyController {
 
     static createProperty = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const property = await propertyService.create(
-            req.headers.userId as string, 
+            req.headers?.userId as string, 
             req.body, 
             req.files as Express.Multer.File[]
         );
@@ -26,8 +26,8 @@ class PropertyController {
 
     static updateProperty = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const updatedProperty = await propertyService.update(
-            req.headers.userId as string,
-            req.headers.userRole as string,
+            req.headers?.userId as string,
+            req.headers?.userRole as string,
             req.params.propertyId, 
             req.body,
             req.files as Express.Multer.File[]

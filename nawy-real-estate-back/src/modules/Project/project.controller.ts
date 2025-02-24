@@ -16,14 +16,14 @@ class ProjectController {
     });
 
     static createProject = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const project = await projectService.create(req.headers.userId as string, req.body);
+        const project = await projectService.create(req.headers?.userId as string, req.body);
         res.status(201).json(project);
     });
 
     static updateProject = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const updatedProject = await projectService.update(
-            req.headers.userId as string, 
-            req.headers.userRole as string, 
+            req.headers?.userId as string, 
+            req.headers?.userRole as string, 
             req.params.projectId, 
             req.body
         );

@@ -56,8 +56,11 @@ class AreaService {
         if (checkArea && checkArea.name == data.name) {
             throw new CustomError("Duplicated area name", 409);
         }
-        const user = await this.userRepository.findOneBy({ _id: userId });
-        data.createdBy = user as User;
+        if(userId){
+            const user = await this.userRepository.findOneBy({ _id: userId });
+            data.createdBy = user as User;
+        }
+        
         const cityId: string = String(data.cityId);
         const city = await this.cityRepository.findOneBy({ _id: cityId });
         if (!city) {

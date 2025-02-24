@@ -63,8 +63,10 @@ class PropertyService {
         }
 
         // get user data for property
-        const user = await this.userRepository.findOneBy({ _id: userId });
-        data.createdBy = user as User;
+        if(userId){
+            const user = await this.userRepository.findOneBy({ _id: userId });
+            data.createdBy = user as User;
+        }
 
         // get project data for property
         const projectId: string = String(data.projectId);

@@ -48,8 +48,10 @@ class CityService {
 
     async create(userId: string, data: Partial<City>) {
         data.name = data.name?.toLowerCase();
-        const user = await this.userRepository.findOneBy({ _id: userId })
-        data.createdBy = user as User;
+        if(userId){
+            const user = await this.userRepository.findOneBy({ _id: userId })
+            data.createdBy = user as User;
+        }
         const city = this.cityRepository.create(data);
         const newCity = await this.cityRepository.save(city);
         return { message: "Done", city: newCity };

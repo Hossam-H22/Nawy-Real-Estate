@@ -17,7 +17,7 @@ class CityController {
     });
 
     static createCity = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const city = await cityService.create(req.headers.userId as string, req.body);
+        const city = await cityService.create(req.headers?.userId as string, req.body);
         res.status(201).json(city);
     });
 

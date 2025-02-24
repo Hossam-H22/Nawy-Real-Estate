@@ -65,7 +65,9 @@ export default function PropertiesList({
     if(error)
         return <ErrorDesign errorMessage={error.message} />;
     
-    // console.log(data);
+    
+    if(!data.properties.length)
+        return <h1>No Data Available</h1>
     
 
     return (

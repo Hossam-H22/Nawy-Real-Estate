@@ -55,8 +55,10 @@ class ProjectService {
         if (checkProject && checkProject.name == data.name) {
             throw new CustomError("Duplicated project name", 409);
         }
-        const user = await this.userRepository.findOneBy({ _id: userId });
-        data.createdBy = user as User;
+        if(userId){
+            const user = await this.userRepository.findOneBy({ _id: userId });
+            data.createdBy = user as User;
+        }
         const areaId: string = String(data.areaId);
         const area = await this.areaRepository.findOneBy({ _id: areaId });
         if (!area) {

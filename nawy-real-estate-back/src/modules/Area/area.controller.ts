@@ -16,14 +16,14 @@ class AreaController {
     });
 
     static createArea = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const area = await areaService.create(req.headers.userId as string, req.body);
+        const area = await areaService.create(req.headers?.userId as string, req.body);
         res.status(201).json(area);
     });
 
     static updateArea = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const updatedArea = await areaService.update(
-            req.headers.userId as string, 
-            req.headers.userRole as string, 
+            req.headers?.userId as string, 
+            req.headers?.userRole as string, 
             req.params.areaId, 
             req.body
         );
