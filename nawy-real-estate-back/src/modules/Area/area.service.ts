@@ -51,6 +51,7 @@ class AreaService {
     }
 
     async create(userId: string, data: Partial<Area>) {
+        data.name = data.name?.toLowerCase();
         const checkArea = await this.areaRepository.findOneBy({ name: data.name });
         if (checkArea && checkArea.name == data.name) {
             throw new CustomError("Duplicated area name", 409);
@@ -76,6 +77,7 @@ class AreaService {
         }
 
         if (data.name) {
+            data.name = data.name.toLowerCase();
             if (area.name == data.name) {
                 throw new CustomError("Sorry cannot update area with the same name", 400);
             }

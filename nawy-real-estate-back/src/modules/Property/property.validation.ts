@@ -9,7 +9,7 @@ export const get = z.object({
 export const create = z.object({
     name: z.string().min(2).max(100),
     description: z.string().min(5).max(500),
-    price: z.coerce.number().positive().min(100000).max(30000000000),
+    price: z.coerce.number().positive().min(1000).max(30000000000),
     type: z.enum([PropertyType.APARTMENT, PropertyType.COMMERCIAL, PropertyType.HOUSE, PropertyType.LAND]),
     status: z.enum([PropertyStatus.AVAILABLE, PropertyStatus.RENTED, PropertyStatus.SOLD]).optional(),
     bedrooms: z.coerce.number().positive().min(1).max(20),

@@ -47,6 +47,7 @@ class CityService {
     }
 
     async create(userId: string, data: Partial<City>) {
+        data.name = data.name?.toLowerCase();
         const user = await this.userRepository.findOneBy({ _id: userId })
         data.createdBy = user as User;
         const city = this.cityRepository.create(data);
@@ -61,6 +62,7 @@ class CityService {
         }
 
         if (data.name) {
+            data.name = data.name.toLowerCase();
             if (checkCity.name == data.name) {
                 throw new CustomError("Sorry cannot update city with the same name", 400);
             }
