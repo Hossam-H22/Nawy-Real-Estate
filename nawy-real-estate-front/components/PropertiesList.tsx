@@ -26,7 +26,6 @@ export default function PropertiesList({quary}: {quary:string}) {
         if(queryObject.numBathRooms!=0 && queryObject.numBathRooms<5) query += `&bathrooms[eq]=${queryObject.numBathRooms}`;
         else if(queryObject.numBathRooms==5) query += `&bathrooms[gte]=${queryObject.numBathRooms}`;
 
-        console.log(queryObject.priceRange);
         
         query += `&price[range]=${queryObject.priceRange[0]},${queryObject.priceRange[1]}`;
         query += `&squareFeet[range]=${queryObject.squareFeetRange[0]},${queryObject.squareFeetRange[1]}`;

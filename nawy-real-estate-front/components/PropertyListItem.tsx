@@ -18,7 +18,7 @@ export default function PropertyListItem({ propertyData }: { propertyData: Prope
     return <div className='grid grid-cols-12 gap-3 mb-3 p-2 border rounded-xl'>
         <div className='col-span-5 relative'>
             <img
-                src={propertyData.images[2].secure_url}
+                src={propertyData.images[0].secure_url}
                 alt='Nawy Real Estate'
                 width={160}
                 height={40}

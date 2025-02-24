@@ -12,6 +12,7 @@ import SearchBar from '@/components/filtering/SearchBar'
 import React, { useState } from 'react'
 
 export default function SearchPage() {
+    if(!window || typeof window === 'undefined') return;
 
     // const [numOfProperties, setNumOfProperties] = useState<number>(0);
     const [showFilterTap, setShowFilterTap] = useState<boolean>(false);

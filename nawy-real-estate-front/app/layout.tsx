@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body
         className={``}
       >
+        <Toaster />
         <Navbar />
         <div className="container mx-auto">
           <ReactQueryProvider>
